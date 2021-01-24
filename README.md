@@ -4,9 +4,9 @@
 
 Class representing a pseudorandom number manager. Includes Mersenne Twister uniform distribution, Box Mueller gaussian distribution, n-sided die rolling, history of variable max size, elementary statistics, and scale/clip/round convenience functions.
 
-<img src="https://raw.githubusercontent.com/justKD/KDRoll/master/readme-screenshot-1.png" alt="" width="800" />
+<img src="https://raw.githubusercontent.com/justKD/KDRoll/blob/main/kdroll-readme-screenshot-1.png" alt="" width="800" />
 
-<img src="https://raw.githubusercontent.com/justKD/KDRoll/master/readme-screenshot-2.png" alt="" width="800" />
+<img src="https://raw.githubusercontent.com/justKD/KDRoll/blob/main/kdroll-readme-screenshot-2.png" alt="" width="800" />
 
 [Try on CodeSandbox](https://codesandbox.io/s/kdroll-n2fem?file=/README.md).
 
