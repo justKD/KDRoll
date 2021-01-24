@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <title>KDRoll</title>
+
+    <meta property="og:title" content="KDRoll" />
+    <meta
+      property="og:description"
+      content="Class representing a pseudorandom number manager. Includes Mersenne Twister uniform distribution, Box Mueller gaussian distribution, n-sided die rolling, history of variable max size, elementary statistics, and scale/clip/round convenience functions."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+    <meta property="og:image:type" content="image/png" />
+
+    <link rel="shortcut icon" href="" />
+
+    <style>
+      body {
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
+          'Lucida Sans', Arial, sans-serif;
+      }
+
+      .outer {
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        width: 100%;
+      }
+
+      .inner {
+        width: 50%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+
+    <div class="outer">KDRollJS Examples - 3300 samples each</div>
+
+    <br /><br />
+
+    <div class="outer">
+      <div class="inner">
+        <canvas id="uniform"></canvas>
+      </div>
+      <div class="inner">
+        <canvas id="d20"></canvas>
+      </div>
+    </div>
+
+    <div class="outer">
+      <div class="inner">
+        <canvas id="gaussian"></canvas>
+      </div>
+      <div class="inner">
+        <canvas id="gaussian-skew"></canvas>
+      </div>
+    </div>
+  </body>
+</html>
