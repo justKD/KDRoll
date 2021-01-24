@@ -6,8 +6,6 @@ Class representing a pseudorandom number manager. Includes Mersenne Twister unif
 
 <img src="https://raw.githubusercontent.com/justKD/KDRoll/main/kdroll-readme-screenshot-1.png" alt="" width="800" />
 
-<img src="https://raw.githubusercontent.com/justKD/KDRoll/main/kdroll-readme-screenshot-2.png" alt="" width="800" />
-
 [Try on CodeSandbox](https://codesandbox.io/s/kdroll-n2fem?file=/README.md).
 
 ## Install
