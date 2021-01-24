@@ -488,7 +488,7 @@ console.log(wholeNumber())
                 </li>
             </ul>
         </td>
-        <td></td>
+        <td><code>{number}</code></td>
         <td>Round a value to a specific number of places. Decimal values < 5 (for any given place) are rounded down.</td>
     </tr>
 </tbody>
