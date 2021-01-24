@@ -1,16 +1,46 @@
-# KDRollJS
+# KDRoll
 
 ##### v 1.3.3 | © Cadence Holmes 2020 | MIT License
 
 Class representing a pseudorandom number manager. Includes Mersenne Twister uniform distribution, Box Mueller gaussian distribution, n-sided die rolling, history of variable max size, elementary statistics, and scale/clip/round convenience functions.
 
-<img src="https://raw.githubusercontent.com/justKD/KDRollJS/master/readme-screenshot-1.png" alt="" width="800" />
+<img src="https://raw.githubusercontent.com/justKD/KDRoll/master/readme-screenshot-1.png" alt="" width="800" />
 
-<img src="https://raw.githubusercontent.com/justKD/KDRollJS/master/readme-screenshot-2.png" alt="" width="800" />
+<img src="https://raw.githubusercontent.com/justKD/KDRoll/master/readme-screenshot-2.png" alt="" width="800" />
 
-## Try It
+[Try on CodeSandbox](https://codesandbox.io/s/kdroll-n2fem?file=/README.md).
 
-Try it out on [CodePen](https://codepen.io/justKD/pen/MWwpzWm/left/?editors=0011/).
+## Install
+
+`src/dist/KDRoll.bundle.js` can be added to your project in multiple ways:
+
+```
+// CommonJS / ES / Node module
+// add to your module file
+
+import { KDRoll } from "KDRoll.bundle.js";
+console.log( KDRoll );
+```
+
+```
+// AMD / Require module
+// add to your module file
+
+require(["KDRoll.bundle.js"], function(KDRoll) {
+  console.log( KDRoll );
+});
+```
+
+```
+// Non-module / CDN
+// add to your html file
+
+<script src="KDRoll.bundle.js"></script>
+<script>
+  const KDRoll = window.kd.KDRoll;
+  console.log( KDRoll );
+</script>
+```
 
 ## Basic Use
 
@@ -169,14 +199,6 @@ console.log(wholeNumber())
         </td>
         <td><code>{number}</code></td>
         <td>Simulates a die-rolling metaphor. Generates a 53-bit random real in the interval [0, 1] with normal distribution, then scales it to a range [1, n] where n is the number of sides, then rounds to whole number.</td>
-    </tr>
-    <tr>
-        <td><code>.uid()</code></td>
-        <td></td>
-        <td>
-            <code>{string}</code> - RFC4122 version 4 compliant unique identifier.
-        </td>
-        <td>Generate an RFC4122 version 4 compliant unique identifier</td>
     </tr>
     <tr>
         <td><code>.seed(seed)</code></td>
