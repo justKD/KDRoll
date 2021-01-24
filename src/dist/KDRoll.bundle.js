@@ -10,35 +10,65 @@
  * statistics, and scale/clip/round convenience functions.
  */
 
+class KDHistory extends Array {
+  constructor() {
+    super();
+    let max = 1000;
+    this.max = (size) => {
+      if (size !== undefined) {
+        if (Number.isSafeInteger(size)) {
+          max = size;
+        } else {
+          console.log('maxHistory(size) must be a safe integer');
+        }
+      }
+      return max;
+    };
+    this.push = (...items) => {
+      let count = items.length;
+      while (count--) if (this.length >= max) this.shift();
+      super.push(items);
+      return this.length;
+    };
+  }
+}
 class KDNumber {
   constructor(value, range = [0, 1]) {
-    this.value =
+    let v =
       typeof value === 'number'
         ? value
         : !Number.isNaN(parseFloat(`${value}`))
         ? parseFloat(`${value}`)
-        : value.value;
-    this.range = range;
+        : value.value();
+    let r = range;
     this.scale = (min = 0, max = 1) => {
-      this.value = KDNumber.scale(this.value, this.range, [min, max]);
-      this.range = [min, max];
+      v = KDNumber.scale(v, r, [min, max]);
+      r = [min, max];
       return this;
     };
     this.clip = (min, max) => {
-      this.value = KDNumber.clip(this.value, [min, max]);
+      v = KDNumber.clip(v, [min, max]);
       return this;
     };
     this.round = (places = 0) => {
-      this.value = KDNumber.round(this.value, places);
+      v = KDNumber.round(v, places);
       return this;
+    };
+    this.value = () => v;
+    this.range = () => r;
+    this.setValue = (value) => {
+      v = value;
+    };
+    this.setRange = (range) => {
+      r = range;
     };
   }
   static scale(value, initialRange, targetRange) {
     const fix = KDNumber.floatingPointFix;
     const r1 = initialRange;
     const r2 = targetRange;
-    const r1Size = r1[1] - r1[0];
-    const r2Size = r2[1] - r2[0];
+    const r1Size = fix(r1[1] - r1[0]);
+    const r2Size = fix(r2[1] - r2[0]);
     const x = fix(value - r1[0]);
     const y = fix(x * r2Size);
     const z = fix(y / r1Size);
@@ -46,9 +76,11 @@ class KDNumber {
     return scaled;
   }
   static clip(value, range) {
-    return KDNumber.floatingPointFix(
-      Math.min(Math.max(range[0], value), range[1])
-    );
+    const fix = KDNumber.floatingPointFix;
+    const clipMin = (v) => fix(Math.max(range[0], v));
+    const clipMax = (v) => fix(Math.min(v, range[1]));
+    const clipped = clipMax(clipMin(value));
+    return clipped;
   }
   static round(value, places = 0) {
     return KDNumber.floatingPointFix(
@@ -68,25 +100,8 @@ class KDNumber {
     return parseFloat(fixed.toFixed(correctDecimalsLength));
   }
 }
-class KDHistory extends Array {
-  constructor() {
-    super();
-    let max = 1000;
-    this.max = (size) => {
-      const s = size;
-      if (Number.isSafeInteger(s)) max = s;
-      return max;
-    };
-    this.push = (...items) => {
-      let count = items.length;
-      while (count--) if (this.length >= max) this.shift();
-      super.push(items);
-      return this.length;
-    };
-  }
-}
 class KDUniform {
-  constructor(seed = null) {
+  constructor(seed) {
     const N = 624;
     let mt = new Array(N);
     let mti = null;
@@ -270,14 +285,18 @@ const KDGaussian = (uniformGenerator, skew = 0) => {
     let n = new KDNumber(Math.abs(sk));
     n.clip(0, 1);
     const skewRight = () => {
-      sk = 1 - n.value;
+      sk = 1 - n.value();
     };
     const skewLeft = () => {
       n.scale(0, 4);
-      sk = n.value;
+      sk = n.value();
     };
-    const noSkew = () => (sk = 1);
-    sk === 0 ? noSkew() : sk < 0 ? skewRight() : skewLeft();
+    const noSkew = () => {
+      sk = 1;
+    };
+    if (sk === 0) noSkew();
+    else if (sk < 0) skewRight();
+    else skewLeft();
     return sk;
   };
   skew = scaleSkew(skew);
@@ -286,11 +305,14 @@ const KDGaussian = (uniformGenerator, skew = 0) => {
   if (typeof uniformGenerator.random === 'function') {
     while (u === 0) u = uniformGenerator.random();
     while (v === 0) v = uniformGenerator.random();
+  } else {
+    console.error('must provide a valid prng generator object');
   }
-  let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
-  num = num / 10.0 + 0.5;
+  const fix = KDNumber.floatingPointFix;
+  let num = fix(Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v));
+  num = fix(num / 10.0 + 0.5);
   if (num > 1 || num < 0) num = Number(KDGaussian(new KDUniform(), skew));
-  num = Math.pow(num, skew);
+  num = fix(Math.pow(num, skew));
   return num;
 };
 const KDElemstats = {
@@ -378,8 +400,9 @@ class KDRoll {
         if (typeof sides === 'number') {
           const n = new KDNumber(uniform.random());
           n.scale(1, sides).round(0);
-          history.push(n.value);
-          return n.value;
+          const num = n.value();
+          history.push(num);
+          return num;
         } else {
           console.log(new Error('Sides must be a number.'));
           return NaN;
@@ -423,8 +446,7 @@ class KDRoll {
     });
   }
   static random() {
-    const roll = new KDRoll();
-    return roll.random();
+    return new KDRoll().random();
   }
   static d(sides) {
     const roll = new KDRoll();

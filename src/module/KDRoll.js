@@ -10,8 +10,8 @@
  * statistics, and scale/clip/round convenience functions.
  */
 
-import { KDNumber } from './deps/KDNumber';
 import { KDHistory } from './deps/KDHistory';
+import { KDNumber } from './deps/KDNumber';
 import { KDUniform } from './deps/KDUniform';
 import { KDGaussian } from './deps/KDGaussian';
 import { KDElemstats } from './deps/KDElemStats';
@@ -69,8 +69,9 @@ export class KDRoll {
         if (typeof sides === 'number') {
           const n = new KDNumber(uniform.random());
           n.scale(1, sides).round(0);
-          history.push(n.value);
-          return n.value;
+          const num = n.value();
+          history.push(num);
+          return num;
         } else {
           console.log(new Error('Sides must be a number.'));
           return NaN;
@@ -119,8 +120,7 @@ export class KDRoll {
    * @returns {number}
    */
   static random() {
-    const roll = new KDRoll();
-    return roll.random();
+    return new KDRoll().random();
   }
   /**
    * @static Convenience function to generate a randomly seeded random number

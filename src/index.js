@@ -13,7 +13,7 @@ const moduleExample = () => {
     standardDeviation: KDRoll.round(roll.standardDeviation(), 3),
   };
   console.group();
-  console.log('KDRoll.esm.js loaded! Rolling a d6 10 times:');
+  console.log('KDRoll.bundle.js loaded! Rolling a d6 10 times:');
   console.log(stats);
   console.groupEnd();
 };

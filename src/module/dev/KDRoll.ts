@@ -1,6 +1,5 @@
 /**
  * @file KDRoll.ts
- * @version 1.3.3
  * @author Cadence Holmes
  * @copyright Cadence Holmes 2020
  * @license MIT
@@ -10,8 +9,8 @@
  * statistics, and scale/clip/round convenience functions.
  */
 
-import { KDNumber } from './KDNumber';
 import { KDHistory } from './KDHistory';
+import { KDNumber } from './KDNumber';
 import { KDUniform } from './KDUniform';
 import { KDGaussian } from './KDGaussian';
 import { KDElemstats } from './KDElemStats';
@@ -177,8 +176,9 @@ export class KDRoll {
         if (typeof sides === 'number') {
           const n = new KDNumber(uniform.random());
           n.scale(1, sides).round(0);
-          history.push(n.value);
-          return n.value;
+          const num = n.value();
+          history.push(num);
+          return num;
         } else {
           console.log(new Error('Sides must be a number.'));
           return NaN;

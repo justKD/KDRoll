@@ -4,7 +4,7 @@
  * @copyright Cadence Holmes 2020
  * @license MIT
  * @fileoverview Functions for calculating mean, median, modes, and
- * standard deviation of an `Array<number>`.
+ * standard deviation of a `number[]`.
  */
 import { KDNumber } from './KDNumber';
 /**

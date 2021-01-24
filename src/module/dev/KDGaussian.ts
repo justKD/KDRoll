@@ -3,8 +3,9 @@
  * @author Cadence Holmes
  * @copyright Cadence Holmes 2020
  * @license MIT
- * @fileoverview Function to convert uniformally distributed random numbers
- * to gaussian distribution using the Box Mueller transform.
+ * @fileoverview Generates a 53-bit random real in the interval [0, 1] with gaussian
+ * distribution (Box Mueller transform) by converting random numbers generated via uniform
+ * distribution (Mersenne Twister).
  */
 
 import { KDNumber } from './KDNumber';
@@ -15,8 +16,8 @@ import { KDUniform } from './KDUniform';
  * distribution (Box Mueller transform).
  * @param {KDUniform | Math} uniformGenerator - A uniform distribution
  * random number generator with a `.random()` method.
- * @param {number} [skew=0] - (-1 to 1) negative values skew data RIGHT,
- * positive values skew data LEFT.
+ * @param {number} [skew=0] - `number` in the range of -1 to 1. Negative
+ * values skew data RIGHT, positive values skew data LEFT.
  * @returns
  * @example
  * ```
@@ -37,14 +38,22 @@ export const KDGaussian = (
   const scaleSkew = (sk: number): number => {
     let n: KDNumber = new KDNumber(Math.abs(sk));
     n.clip(0, 1);
-    const skewRight = () => /* sk < 0 */ {
-      sk = 1 - n.value;
+
+    /* sk < 0 */
+    const skewRight = () => {
+      sk = 1 - n.value();
     };
-    const skewLeft = () => /* sk > 0 */ {
+
+    /* sk > 0 */
+    const skewLeft = () => {
       n.scale(0, 4);
-      sk = n.value;
+      sk = n.value();
     };
-    const noSkew = () => /* sk = 0 */ (sk = 1);
+
+    /* sk = 0 */
+    const noSkew = () => {
+      sk = 1;
+    };
 
     if (sk === 0) noSkew();
     else if (sk < 0) skewRight();
@@ -59,15 +68,19 @@ export const KDGaussian = (
   if (typeof uniformGenerator.random === 'function') {
     while (u === 0) u = uniformGenerator.random();
     while (v === 0) v = uniformGenerator.random();
+  } else {
+    console.error('must provide a valid prng generator object');
   }
 
+  const fix = KDNumber.floatingPointFix;
+
   /* apply gaussian distribution */
-  let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  let num = fix(Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v));
   /* scale back to 0-1 */
-  num = num / 10.0 + 0.5;
+  num = fix(num / 10.0 + 0.5);
   /* resample if out of range */
   if (num > 1 || num < 0) num = Number(KDGaussian(new KDUniform(), skew));
   /* skew */
-  num = Math.pow(num, skew);
+  num = fix(Math.pow(num, skew));
   return num;
 };

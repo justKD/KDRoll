@@ -18,8 +18,13 @@ export class KDHistory extends Array {
     super();
     let max = 1000;
     this.max = (size) => {
-      const s = size;
-      if (Number.isSafeInteger(s)) max = s;
+      if (size !== undefined) {
+        if (Number.isSafeInteger(size)) {
+          max = size;
+        } else {
+          console.log('maxHistory(size) must be a safe integer');
+        }
+      }
       return max;
     };
     this.push = (...items) => {

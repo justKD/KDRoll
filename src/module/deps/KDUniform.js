@@ -19,7 +19,7 @@ export class KDUniform {
    * 32-bit `Integer`, `Uint32Array`, or `number[]` of arbitrary values and
    * length. If `null`, `KDRoll()` will generate a random seed.
    */
-  constructor(seed = null) {
+  constructor(seed) {
     const N = 624;
     let mt = new Array(N);
     let mti = null;
